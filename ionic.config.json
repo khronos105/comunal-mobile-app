@@ -1,0 +1,7 @@
+{
+  "name": "communal",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}

@@ -11,16 +11,15 @@
 <script>
 import { IonList } from '@ionic/vue'
 import ComunalItem from './ComunalItem.vue'
+import { mapGetters } from 'vuex'
 
 export default {
     components:{
         ComunalItem,
         IonList
     },
-    props:{
-        comunals:{
-            type: Array
-        }
+    computed:{
+        ...mapGetters('comunal', ['comunals'])
     }
 }
 </script>

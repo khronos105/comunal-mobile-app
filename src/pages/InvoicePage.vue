@@ -40,6 +40,7 @@
 <script>
 import pdfvuer from 'pdfvuer'
 import 'pdfjs-dist/build/pdf.worker.entry' // not needed since v1.9.1
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -47,6 +48,7 @@ export default {
   },
   data () {
     return {
+      invoice:null,
       page: 1,
       numPages: 0,
       pdfdata: undefined,
@@ -58,13 +60,16 @@ export default {
   computed: {
     formattedZoom () {
         return Number.parseInt(this.scale * 100);
-    },
-    invoice() {
-        return this.$store.getters.invoice(this.invoiceId);
-    },
+    }
   },
-  mounted () {
-    this.getPdf()
+  created () {
+    this.getInvoice(this.invoiceId)
+        .then(({data}) => {
+            console.log(data)
+            this.invoice = data
+            this.file = this.invoice.docs[0]
+            this.getPdf()
+        })
   },
   watch: {
     show: function (s) {
@@ -80,6 +85,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('comunal', ['getInvoice']),
     handle_pdf_link: function (params) {
       // Scroll to the appropriate place on our page - the Y component of
       // params.destArray * (div height / ???), from the bottom of the page div
@@ -88,7 +94,7 @@ export default {
     },
     getPdf () {
       var self = this;
-      self.pdfdata = pdfvuer.createLoadingTask(this.invoice.file);
+      self.pdfdata = pdfvuer.createLoadingTask(this.file.url);
       self.pdfdata.then(pdf => {
         self.numPages = pdf.numPages;
         window.onscroll = function() { 

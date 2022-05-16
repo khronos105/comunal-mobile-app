@@ -1,6 +1,6 @@
 <template>
-  <ion-img :src="comunal.image" :alt="comunal.title"></ion-img>
-  <h1>{{ comunal.title }}</h1>
+  <ion-img :src="comunal.image" :alt="comunal.date"></ion-img>
+  <h1>{{ comunal.date }}</h1>
   <ion-grid>
     <ion-row
       v-for="invoice in comunal.invoices"
@@ -12,7 +12,7 @@
         <ion-button
           :router-link="`/invoice/${invoice.id}`"
         >
-          <b>{{ invoice.ammount }}€</b>
+          <b>{{ invoice.quantity }}€</b>
           <ion-icon slot="end" :icon="newspaperOutline"></ion-icon>
         </ion-button>
       </ion-col>
@@ -21,7 +21,7 @@
     <ion-row class="ion-align-items-center">
       <ion-col class="ion-align-items-center">Total</ion-col>
       <ion-col class="ion-align-items-center">
-        <b>{{ ammount(comunal) }}€</b>
+        <b>{{ ammount(comunal.id) }}€</b>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -37,6 +37,7 @@ import {
   IonButton,
 } from "@ionic/vue";
 import { newspaperOutline } from 'ionicons/icons';
+import { mapGetters } from 'vuex'
 
 export default {
   props: ["comunal"],
@@ -53,11 +54,9 @@ export default {
           newspaperOutline
       }
   },
-  methods: {
-    ammount(comunal) {
-      return this.$store.getters.ammount(comunal.id);
-    },
-  },
+  computed:{
+    ...mapGetters('comunal', ['ammount', 'getComunalById']),
+  }
 };
 </script>
 

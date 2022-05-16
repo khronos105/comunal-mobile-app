@@ -13,7 +13,7 @@
                 ></ion-icon>
             </ion-button>
         </template>
-        <comunals-list :comunals="comunals"></comunals-list>
+        <comunals-list></comunals-list>
     </base-layout>
 </template>
 
@@ -21,6 +21,7 @@
 import { IonButton, IonIcon } from '@ionic/vue'
 import { add } from 'ionicons/icons'
 import ComunalsList from '../components/comunals/ComunalsList.vue';
+import { mapActions } from 'vuex'
 
 export default {
     components:{
@@ -33,10 +34,11 @@ export default {
             add
         }
     },
-    computed:{
-        comunals(){
-            return this.$store.getters.comunals;
-        }
+    methods:{
+        ...mapActions('comunal', ['getCommunals'])
+    },
+    created(){
+        this.getCommunals()
     }
 }
 </script>

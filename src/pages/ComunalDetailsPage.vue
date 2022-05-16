@@ -1,5 +1,5 @@
 <template>
-    <base-layout :page-title="comunal ? comunal.title : 'Loging ...'" page-default-back-link="/comunals">
+    <base-layout :page-title="comunal ? comunal.date : 'Loging ...'" page-default-back-link="/comunals">
         <h2 v-if="!comunal">Could not found a comunal for the given Id.</h2>
         <comunal-overview
             v-else
@@ -10,6 +10,7 @@
 
 <script>
 import ComunalOverview from '../components/comunals/ComunalOverview.vue'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     components:{
@@ -20,9 +21,18 @@ export default {
             comunalId: this.$route.params.id,
         }
     },
+    methods:{
+        ...mapActions('comunal', ['getCommunals'])
+    },
     computed:{
+        ...mapGetters('comunal', ['getComunalById']),
         comunal() {
-            return this.$store.getters.comunal(this.comunalId);
+            return this.getComunalById(this.comunalId);
+        }
+    },
+    created(){
+        if(!this.comunal){
+            this.getCommunals()
         }
     }
 }

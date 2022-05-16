@@ -1,13 +1,13 @@
 <template>
     <ion-item :router-link="`/comunals/${comunal.id}`">
         <ion-thumbnail slot="start">
-            <ion-img :src="comunal.image" :alt="comunal.title"></ion-img>
+            <ion-img :src="comunal.image" :alt="comunal.date"></ion-img>
         </ion-thumbnail>
         <ion-label>
-            {{ comunal.title }}
+            {{ comunal.date }}
         </ion-label>
         <ion-note slot="end" color="primary">
-            {{ ammount(comunal) }}€
+            {{ ammount(comunal.id) }}€
         </ion-note>
     </ion-item>
 </template>
@@ -20,6 +20,7 @@ import {
     IonLabel,
     IonNote
 } from '@ionic/vue'
+import { mapGetters } from 'vuex'
 
 export default {
     props:{
@@ -34,10 +35,8 @@ export default {
         IonLabel,
         IonNote
     },
-    methods:{
-        ammount(comunal){
-            return this.$store.getters.ammount(comunal.id);
-        }
+    computed:{
+        ...mapGetters('comunal', ['ammount'])
     }
 }
 </script>

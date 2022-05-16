@@ -1,152 +1,33 @@
 <template>
-  <div id="pdfvuer">
-    <pdf :src="pdfdata" v-for="i in numPages" :key="i" :id="i" :page="i"
-      :scale.sync="scale" style="width:100%;margin:20px auto;"
-        :annotation="true"
-        :resize="true"
-        @link-clicked="handle_pdf_link">
-      <template slot="loading">
-        loading content here...
-      </template>
+  <base-layout page-title="All comunals" page-default-back-link="/comunals">
+    <pdf v-if="src" :src="src" :page="1">
+      <template slot="loading"> loading content here... </template>
     </pdf>
-
-    <div id="buttons" class="ui grey three item inverted bottom fixed menu transition hidden">
-      <a class="item" @click="page > 1 ? page-- : 1">
-        <i class="left chevron icon"></i>
-        Back
-      </a>
-      <a class="ui active item">
-        {{page}} / {{ numPages ? numPages : '∞' }}
-      </a>
-      <a class="item" @click="page < numPages ? page++ : 1">
-        Forward
-        <i class="right chevron icon"></i>
-      </a>
-      <a class="item" @click="scale -= scale > 0.2 ? 0.1 : 0">
-        <i class="left chevron icon" />
-          Zoom -
-      </a>
-      <a class="ui active item">
-        {{ formattedZoom }} %
-      </a>
-      <a class="item" @click="scale += scale < 2 ? 0.1 : 0">
-        Zoom +
-        <i class="right chevron icon" />
-      </a>
-    </div>
-  </div>
+  </base-layout>
 </template>
 
 <script>
-import pdfvuer from 'pdfvuer'
-import 'pdfjs-dist/build/pdf.worker.entry' // not needed since v1.9.1
-import { mapGetters, mapActions } from 'vuex'
+import pdf from "pdfvuer";
+import "pdfjs-dist/build/pdf.worker.entry"; // not needed since v1.9.1
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
-    pdf: pdfvuer
+    pdf,
   },
-  data () {
+  data() {
     return {
-      invoice:null,
-      page: 1,
-      numPages: 0,
-      pdfdata: undefined,
-      errors: [],
-      scale: 'page-width',
+      src: null,
       invoiceId: this.$route.params.id,
-    }
+    };
   },
-  computed: {
-    formattedZoom () {
-        return Number.parseInt(this.scale * 100);
-    }
-  },
-  created () {
-    this.getInvoice(this.invoiceId)
-        .then(({data}) => {
-            console.log(data)
-            this.invoice = data
-            this.file = this.invoice.docs[0]
-            this.getPdf()
-        })
-  },
-  watch: {
-    show: function (s) {
-      if(s) {
-        this.getPdf();
-      }
-    },
-    page: function (p) {
-      if( window.pageYOffset <= this.findPos(document.getElementById(p)) || ( document.getElementById(p+1) && window.pageYOffset >= this.findPos(document.getElementById(p+1)) )) {
-        // window.scrollTo(0,this.findPos(document.getElementById(p)));
-        document.getElementById(p).scrollIntoView();
-      }
-    }
+  created() {
+    this.getInvoice(this.invoiceId).then(({ data }) => {
+      this.src = data.docs[0].url;
+    });
   },
   methods: {
-    ...mapActions('comunal', ['getInvoice']),
-    handle_pdf_link: function (params) {
-      // Scroll to the appropriate place on our page - the Y component of
-      // params.destArray * (div height / ???), from the bottom of the page div
-      var page = document.getElementById(String(params.pageNumber));
-      page.scrollIntoView();
-    },
-    getPdf () {
-      var self = this;
-      self.pdfdata = pdfvuer.createLoadingTask(this.file.url);
-      self.pdfdata.then(pdf => {
-        self.numPages = pdf.numPages;
-        window.onscroll = function() { 
-          changePage() 
-          stickyNav()  
-        }
-
-        // Get the offset position of the navbar
-        var sticky = $('#buttons')[0].offsetTop
-
-        // Add the sticky class to the self.$refs.nav when you reach its scroll position. Remove "sticky" when you leave the scroll position
-        function stickyNav() {
-          if (window.pageYOffset >= sticky) {
-            $('#buttons')[0].classList.remove("hidden")
-          } else {
-            $('#buttons')[0].classList.add("hidden")
-          }
-        }
-
-        function changePage () {
-          var i = 1, count = Number(pdf.numPages);
-          do {
-            if(window.pageYOffset >= self.findPos(document.getElementById(i)) && 
-                window.pageYOffset <= self.findPos(document.getElementById(i+1))) {
-              self.page = i
-            }
-            i++
-          } while ( i < count)
-          if (window.pageYOffset >= self.findPos(document.getElementById(i))) {
-            self.page = i
-          }
-        }
-      });
-    },
-    findPos(obj) {
-      return obj.offsetTop;
-    }
-  }
-}
+    ...mapActions("comunal", ["getInvoice"]),
+  },
+};
 </script>
-<style src="pdfvuer/dist/pdfvuer.css"></style>
-<style lang="css" scoped>
-  #buttons {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    position: absolute;
-    top: 10px;
-    width: 100%;
-    text-align: center;
-  }
-  /* Page content */
-  .content {
-    padding: 16px;
-  }
-</style>

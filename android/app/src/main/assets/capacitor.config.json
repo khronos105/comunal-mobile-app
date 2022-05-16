@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "communal",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}

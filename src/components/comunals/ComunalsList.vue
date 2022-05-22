@@ -5,21 +5,38 @@
             :key="comunal.id"
             :comunal="comunal"
         ></comunal-item>
+        <ion-text 
+            color="danger" 
+            v-if="comunals.length == 0"
+            class="text-center"
+        >
+            <h5>No items found.</h5>
+        </ion-text>
     </ion-list>
 </template>
 
 <script>
-import { IonList } from '@ionic/vue'
+import { IonList, IonText } from '@ionic/vue'
 import ComunalItem from './ComunalItem.vue'
 import { mapGetters } from 'vuex'
 
 export default {
     components:{
         ComunalItem,
-        IonList
+        IonList,
+        IonText
     },
     computed:{
         ...mapGetters('comunal', ['comunals'])
+    },
+    mounted(){
+        console.log(this.comunals)
     }
 }
 </script>
+
+<style scoped>
+.text-center{
+    text-align: center;
+}
+</style>

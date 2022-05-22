@@ -38,8 +38,10 @@ export default {
         addData(data){
             this.formData.push(data)
         },
-        submit(){
-            this.createComunal(this.formData)
+        async submit(){
+            await this.createComunal(this.formData)
+            this.formData = []
+            this.$router.push('/comunals')
         }
     },
     created(){
@@ -47,9 +49,7 @@ export default {
             .then(({data}) => {
                 this.invoiceTypes = data
             })
-        
-
-    }
+    },
 }
 </script>
 

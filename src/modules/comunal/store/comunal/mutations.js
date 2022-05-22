@@ -13,3 +13,12 @@ export const addMemory = (state, memoryData) => {
 export const setComunals = (state, data) => {
     state.comunals = [ ...data ]
 }
+
+export const setComunal = (state, data) => {
+    state.comunals.unshift(data)
+}
+
+export const deleteComunal = (state, data) => {
+   state.comunals = state.comunals.filter(item => item.id !== data.id)
+}
+

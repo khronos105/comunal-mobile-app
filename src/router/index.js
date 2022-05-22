@@ -7,6 +7,7 @@ const routes= [
     redirect: '/comunals'
   },
   {
+    name:'comunals',
     path: '/comunals',
     component: () => import('../pages/ComunalsPage.vue')
   },

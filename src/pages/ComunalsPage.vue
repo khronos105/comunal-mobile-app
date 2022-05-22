@@ -5,7 +5,7 @@
     >
         <template v-slot:actions-end>
             <ion-button 
-                router-link="/comunals/add"
+                href="/comunals/add"
             >
                 <ion-icon
                     slot="icon-only" 

@@ -24,6 +24,13 @@
         <b>{{ ammount(comunal.id) }}€</b>
       </ion-col>
     </ion-row>
+    <ion-row class="ion-align-items-center">
+      <ion-col class="ion-align-items-center">
+        <ion-button @click="onDeleteComunal" color="danger" fill="solid">
+          <ion-icon :icon="trashOutline"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
   </ion-grid>
 </template>
 
@@ -36,8 +43,8 @@ import {
   IonIcon,
   IonButton,
 } from "@ionic/vue";
-import { newspaperOutline } from 'ionicons/icons';
-import { mapGetters } from 'vuex'
+import { newspaperOutline, trashOutline } from 'ionicons/icons';
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   props: ["comunal"],
@@ -51,11 +58,19 @@ export default {
   },
   data(){
       return {
-          newspaperOutline
+          newspaperOutline,
+          trashOutline
       }
   },
   computed:{
     ...mapGetters('comunal', ['ammount', 'getComunalById']),
+  },
+  methods:{
+    ...mapActions('comunal', ['deleteComunal']),
+    async onDeleteComunal(){
+      await this.deleteComunal(this.comunal.id)
+      this.$router.push({'name': 'comunals'})
+    }
   }
 };
 </script>

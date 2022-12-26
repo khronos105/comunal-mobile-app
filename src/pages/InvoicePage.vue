@@ -22,12 +22,7 @@ export default {
     };
   },
   created() {
-    this.getInvoice(this.invoiceId).then(({ data }) => {
-      this.src = data.docs[0].url;
-    });
-  },
-  methods: {
-    ...mapActions("comunal", ["getInvoice"]),
+    this.src = `http://localhost/api/docs/${this.invoiceId}/file`;
   },
 };
 </script>

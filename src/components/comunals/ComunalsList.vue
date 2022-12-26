@@ -28,9 +28,6 @@ export default {
     },
     computed:{
         ...mapGetters('comunal', ['comunals'])
-    },
-    mounted(){
-        console.log(this.comunals)
     }
 }
 </script>

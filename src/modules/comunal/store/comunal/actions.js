@@ -24,20 +24,23 @@ export const createComunal = async(context, dataStore) => {
     const dataToStore = {...dataStore}
     const formData = new FormData();
     formData.append('invoices', JSON.stringify(dataToStore))
-    await axios.post('http://bilibov.tk/comunals', formData).then(data => {
-        if(data.status === 201){
-            context.commit('setComunal', data.data)
-        }
-    })
+
+    await comunalApi.post('/comunals', formData)
+        .then(data => {
+            if(data.status === 201){
+                context.commit('setComunal', data.data)
+            }
+        })
 }
 
 export const deleteComunal = async(context, invoiceId) => {
-    await axios.delete(`http://bilibov.tk/comunals/${invoiceId}`).then(data => {
-        if(data.status === 200){
-            context.commit('deleteComunal', data.data)
-        }
-    }).catch(e => {
-        console.log(e)
-    })
+    await comunalApi.delete(`/comunals/${invoiceId}`)
+        .then(data => {
+            if(data.status === 200){
+                context.commit('deleteComunal', data.data)
+            }
+        }).catch(e => {
+            console.log(e)
+        })
 }
 

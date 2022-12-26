@@ -2,7 +2,7 @@
 import axios from 'axios'
 
 const comunalApi = axios.create({
-    baseURL: 'http://bilibov.tk',
+    baseURL: process.env.VUE_APP_API_URL,
     headers: {
         'Content-Type':'application/json'
     }

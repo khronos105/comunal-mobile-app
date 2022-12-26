@@ -1,7 +1,7 @@
 {
   "name": "communal",
   "version": "0.0.1",
-  "proxy":"http://bilibov.tk",
+  "proxy": "http://api.bilibov.com",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
